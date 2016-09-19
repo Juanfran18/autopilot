@@ -1,0 +1,82 @@
+<html>  
+	<head>  
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">  
+		<title>Ejemplo de uso - API Google Maps - CLH</title>  	  
+		<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAHhzikxCQyRAS8ryQoB75mRT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQiqBRnE1Iky5sZfKGxzYbUanZ0HA" type="text/javascript"></script>  
+		<script type="text/javascript">  
+			 (function(){
+	var content = document.getElementById("geolocation-test");
+
+		if (navigator.geolocation)
+		{
+			navigator.geolocation.getCurrentPosition(function(objPosition)
+			{
+				var lon = objPosition.coords.longitude;
+				var lat = objPosition.coords.latitude;
+
+				content.innerHTML = "<p><strong>Latitud:</strong> " + lat + "</p><p><strong>Longitud:</strong> " + lon + "</p>";
+
+			},
+			function(objPositionError)
+			{
+				switch (objPositionError.code)
+				{
+					case objPositionError.PERMISSION_DENIED:
+						content.innerHTML = "No se ha permitido el acceso a la posición del usuario.";
+					break;
+					case objPositionError.POSITION_UNAVAILABLE:
+						content.innerHTML = "No se ha podido acceder a la información de su posición.";
+					break;
+					case objPositionError.TIMEOUT:
+						content.innerHTML = "El servicio ha tardado demasiado tiempo en responder.";
+					break;
+					default:
+						content.innerHTML = "Error desconocido.";
+				}
+			}, {
+				maximumAge: 75000,
+				timeout: 15000
+			});
+		}
+		else
+		{
+			content.innerHTML = "Su navegador no soporta la API de geolocalización.";
+		}
+	})(); 
+			  
+			function inicializar() {  
+				if (GBrowserIsCompatible()) {  
+					var map = new GMap2(document.getElementById("map"));  
+					map.setCenter(new GLatLng(-33.43795,-70.603627), 15);  
+					map.addControl(new GMapTypeControl());  
+					map.addControl(new GLargeMapControl());  
+					map.addControl(new GScaleControl());  
+					map.addControl(new GOverviewMapControl());  
+					//map.addOverlay(new GMarker(new GLatLng(-33.43795,-70.603627)));  
+					  
+					function informacion(ubicacion, descripcion) {  
+					  
+						var marca = new GMarker(ubicacion);  
+						GEvent.addListener(marca, "click", function() {marca.openInfoWindowHtml(descripcion);} );  						  
+						return marca;  
+					  
+					}  
+					  
+					var ubicacion = new GLatLng(-33.43795,-70.603627);  
+					var descripcion = '<b>Texto ejemplo</b><br/>Para tutorial de CLH<br />';  
+					var marca = informacion(ubicacion, descripcion);  
+					  
+					map.addOverlay(marca);  
+				  
+				}  
+			}  
+		  
+		</script>  
+	  
+	</head>  
+	<body>  
+		<div id="map" style="width:600px; height:600px">  
+		<script type="text/javascript">inicializar();</script>  
+		</div>  
+	</body>  
+</html>  
