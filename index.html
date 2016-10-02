@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>autopilot</title>
+		<link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+		  <meta charset="UTF-8">
+    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js?ver=3.1.2'></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAaIZ65QFkxzIbekztgHEXX7BBPId45dTg&sensor=true"></script>
+	<script type="text/javascript"> 
+
+		var mapa;
+
+		function inicializar() {
+			var opciones = {
+			  zoom: 16,
+			  mapTypeId: google.maps.MapTypeId.HYBRID		  
+			};
+			mapa = new google.maps.Map(document.getElementById('mapa_content'), opciones);
+			if (navigator.geolocation)
+			{
+				navigator.geolocation.getCurrentPosition(mostrarLocalizacion);
+			}
+			else{
+				alert("Su navegador no soporta Geolocalizacion");
+				}
+		}
+
+	    function mostrarLocalizacion(posicion)
+	     {
+            var pos = new google.maps.LatLng(posicion.coords.latitude,posicion.coords.longitude);
+            var gmarker = new google.maps.Marker({
+              map: mapa,
+			  draggable: true,
+              position: pos,
+			  animation: google.maps.Animation.BOUNCE,
+			  title: 'Usted esta aqui'
+			  
+            });
+			
+            mapa.setCenter(pos);
+	      }
+		
+	    function manejadorDeError(error) {
+
+		   switch(error.code)
+            {
+                case error.PERMISSION_DENIED: alert("El usuario no permite compartir datos de geolocalizacion");
+                break;
+
+                case error.POSITION_UNAVAILABLE: alert("Imposible detectar la posicio actual");
+                break;
+
+                case error.TIMEOUT: alert("La posicion debe recuperar el tiempo de espera");
+                break;
+
+                default: alert("Error desconocido");
+                break;
+            }
+			var opciones = {
+			  map: mapa,			  
+			  position: new google.maps.LatLng(0, 0),
+			  content: content
+			};
+			var gmarker = new google.maps.gmarker(opciones);
+			mapa.setCenter(opciones.position);
+      }
+      google.maps.event.addDomListener(window, 'load', inicializar);
+    </script>
+	</head>
+
+	<body>
+		<div id="templatemo_wrapper1">
+			<div id="templatemo_wrapper2">
+
+				<div id="templatemo_container">
+					
+					<div id="templatemo_menu">
+						<ul>
+							<li><a href="index.html"  class="current">Piloto automatico</a></li>           
+						</ul>  
+					</div>
+					
+					<div id="templatemo_header_banner">
+						<div id="templatemo_header">
+							<div id="templatemo_sitetitle">
+								Auto<span> Pilot</span>            
+							</div>
+							<div id="templatemo_tagline">Tu camino en nuestrs manos</div>
+						</div>
+						<div id="templatemo_banner">
+							<div id="templatemo_bannertext">
+								piloto automatico<br /><span>Tu guia de viaje</span><br/>:)
+							</div>
+						</div>
+					</div>
+					
+					<div id="templatemo_content">
+						<div id="templatemo_leftcolumn">
+							<div class="login_form">
+								<h1>Planificar Ruta</h1>
+						
+						  <form method="get" action="#">
+									<div class="form_row"><label>Destino</label><input name="Destino" type="text" class="inputfield" id="Destino" maxlength="60"/>
+							  </div>
+									<div class="form_row"><label>Password</label><input name="password" type="password" class="inputfield" id="password" maxlength="60"/>
+							  </div>
+									<input class="button" type="submit" name="Submit" value="Login" />
+								</form>
+							</div>
+							
+							
+						</div>
+						<div id="mapa_content">
+							
+						</div> 
+					</div>
+						<div id="templatemo_footer">
+							<a href="#">Home</a> | <a href="#">Services</a> | <a href="#">Solutions</a> | <a href="#">Partners</a> | <a href="#">News</a> | <a href="#">Contact Us</a><br />
+							Copyright © 2048 <a href="#"><strong>Your Company Name</strong></a>
+						</div>
+					
+				</div>
+			   
+				
+			</div> 
+		</div> 
+	</body>
+</html>
