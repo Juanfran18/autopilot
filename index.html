@@ -24,6 +24,8 @@
 			else{
 				alert("Su navegador no soporta Geolocalizacion");
 				}
+			var trafficLayer = new google.maps.TrafficLayer();
+			trafficLayer.setMap(mapa);
 		}
 
 	    function mostrarLocalizacion(posicion)
@@ -33,7 +35,8 @@
               map: mapa,
 			  draggable: true,
               position: pos,
-			  animation: google.maps.Animation.BOUNCE,
+			  //animation: google.maps.Animation.BOUNCE,
+			  icon:'images/car2.png',
 			  title: 'Usted esta aqui'
 			  
             });
