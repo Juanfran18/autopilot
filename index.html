@@ -41,12 +41,13 @@
 		}
 			
 		function ruta(r){
+			var punto=pos;
 			var objConfigDR = {
 				map:mapa,
 				suppressMarkers: true
 			}
 			var objConfigDS={
-				origin:pos,
+				origin:punto,
 				destination:r,
 				travelMode: google.maps.TravelMode.DRIVING
 			}
@@ -61,6 +62,8 @@
 					alert("error");
 				}
 			}	
+			punto=r;
+			pos=r;
 		}
 		
 		function Marker(location) {
