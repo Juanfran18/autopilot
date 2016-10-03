@@ -6,11 +6,17 @@
 		<link href="templatemo_style.css" rel="stylesheet" type="text/css" />
 		  <meta charset="UTF-8">
     <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js?ver=3.1.2'></script>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAaIZ65QFkxzIbekztgHEXX7BBPId45dTg&sensor=true"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxvqY-eE-HqZqIm34jS-Ny9ADFkpbrKoE&sensor=true"></script>
 	<script type="text/javascript"> 
-
+		var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		var labelIndex = 0;
 		var mapa;
-
+		var pos;
+		var inicio;
+		var trafficLayer;
+		var marker;
+		var dr;
+		
 		function inicializar() {
 			var opciones = {
 			  zoom: 16,
@@ -24,50 +30,63 @@
 			else{
 				alert("Su navegador no soporta Geolocalizacion");
 				}
-			var trafficLayer = new google.maps.TrafficLayer();
+			trafficLayer = new google.maps.TrafficLayer();
 			trafficLayer.setMap(mapa);
+			
+			google.maps.event.addListener(mapa, 'click', function(event) {
+				Marker(event.latLng, mapa);
+				ruta(event.latLng);	
+			});
 		}
-
+			
+		function ruta(r){
+			var objConfigDR = {
+				map:mapa,
+				suppressMarkers: true
+			}
+			var objConfigDS={
+				origin:pos,
+				destination:r,
+				travelMode: google.maps.TravelMode.DRIVING
+			}
+			var ds = new google.maps.DirectionsService( );
+			var dr = new google.maps.DirectionsRenderer(objConfigDR);
+				ds.route(objConfigDS,fnRender);
+				
+			function fnRender(resultados,status){
+				if(status == 'OK'){
+					dr.setDirections(resultados);
+				}else{
+					alert("error");
+				}
+			}	
+		}
+		
+		function Marker(location) {
+			marker = new google.maps.Marker({
+				draggable: true,
+				position: location,
+				label: labels[labelIndex++ % labels.length],
+				title: 'hola'+ location,
+				map: mapa
+			});		  
+		}
+	
 	    function mostrarLocalizacion(posicion)
 	     {
-            var pos = new google.maps.LatLng(posicion.coords.latitude,posicion.coords.longitude);
-            var gmarker = new google.maps.Marker({
+			
+            pos = new google.maps.LatLng(posicion.coords.latitude,posicion.coords.longitude);
+            inicio = new google.maps.Marker({
               map: mapa,
 			  draggable: true,
               position: pos,
-			  //animation: google.maps.Animation.BOUNCE,
 			  icon:'images/car2.png',
-			  title: 'Usted esta aqui'
-			  
-            });
-			
+			  title: 'Usted esta aqui',
+			  Animation: google.maps.Animation.DROP
+            });	
             mapa.setCenter(pos);
-	      }
+	     }		
 		
-	    function manejadorDeError(error) {
-
-		   switch(error.code)
-            {
-                case error.PERMISSION_DENIED: alert("El usuario no permite compartir datos de geolocalizacion");
-                break;
-
-                case error.POSITION_UNAVAILABLE: alert("Imposible detectar la posicio actual");
-                break;
-
-                case error.TIMEOUT: alert("La posicion debe recuperar el tiempo de espera");
-                break;
-
-                default: alert("Error desconocido");
-                break;
-            }
-			var opciones = {
-			  map: mapa,			  
-			  position: new google.maps.LatLng(pos),
-			  content: content
-			};
-			var gmarker = new google.maps.gmarker(opciones);
-			mapa.setCenter(opciones.position);
-      }
       google.maps.event.addDomListener(window, 'load', inicializar);
     </script>
 	</head>
@@ -101,15 +120,11 @@
 					<div id="templatemo_content">
 						<div id="templatemo_leftcolumn">
 							<div class="login_form">
-								<h1>Planificar Ruta</h1>
-						
-						  <form method="get" action="#">
-									<div class="form_row"><label>Destino</label><input name="Destino" type="text" class="inputfield" id="Destino" maxlength="60"/>
-							  </div>
-									<div class="form_row"><label>Password</label><input name="password" type="password" class="inputfield" id="password" maxlength="60"/>
-							  </div>
-									<input class="button" type="submit" name="Submit" value="Login" />
-								</form>
+								<h1>Planificar Ruta</h1>						
+								
+									<div class="form_row"><label>Destino</label><input id="pac-input" class="controls" type="text">
+									</div>						
+								
 							</div>
 							
 							
