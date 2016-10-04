@@ -33,15 +33,18 @@
 			trafficLayer = new google.maps.TrafficLayer();
 			trafficLayer.setMap(mapa);
 			
-			google.maps.event.addListener(mapa, 'click', function(event) {
+			google.maps.event.addListener(mapa, 'dblclick', function(event) {
 				Marker(event.latLng, mapa);
 				ruta(event.latLng);	
+				mostrar();
 			});
+			
 			
 		}
 			
 		function ruta(r){
 			var punto=pos;
+			
 			var objConfigDR = {
 				map:mapa,
 				suppressMarkers: true
@@ -54,6 +57,7 @@
 			var ds = new google.maps.DirectionsService( );
 			var dr = new google.maps.DirectionsRenderer(objConfigDR);
 				ds.route(objConfigDS,fnRender);
+				dr.setPanel(document.getElementById('displayD'));
 				
 			function fnRender(resultados,status){
 				if(status == 'OK'){
@@ -64,14 +68,13 @@
 			}	
 			punto=r;
 			pos=r;
+			
 		}
 		
 		function Marker(location) {
 			marker = new google.maps.Marker({
-				draggable: true,
 				position: location,
 				label: labels[labelIndex++ % labels.length],
-				title: 'hola'+ location,
 				map: mapa
 			});		  
 		}
@@ -81,15 +84,18 @@
 			
             pos = new google.maps.LatLng(posicion.coords.latitude,posicion.coords.longitude);
             inicio = new google.maps.Marker({
-              map: mapa,
-			  draggable: true,
+              map: mapa,			 
               position: pos,
 			  icon:'images/car2.png',
 			  title: 'Usted esta aqui',
 			  Animation: google.maps.Animation.DROP
             });	
             mapa.setCenter(pos);
-	     }		
+	     }	
+			
+		function mostrar(){
+			document.getElementById('displayD').style.visibility = 'visible';
+		}
 		
       google.maps.event.addDomListener(window, 'load', inicializar);
     </script>
@@ -124,15 +130,18 @@
 					<div id="templatemo_content">
 						<div id="templatemo_leftcolumn">
 							<div class="login_form">
-								<h1>Planificar Ruta</h1>						
-								
+								<h1>Planificar Ruta</h1>
 									<div class="form_row"><label>Destino</label><input id="pac-input" class="controls" type="text">
-									</div>						
+									</div>	
+							</div>
+							<div class="spacetobottom"></div>
 								
+							<div id="displayD"> 
+								<h2>Instruciones</h2>
 							</div>
 							
-							
 						</div>
+						
 						<div id="mapa_content">
 							
 						</div> 
